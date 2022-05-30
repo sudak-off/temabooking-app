@@ -29,6 +29,17 @@ app.use("/api/hotels", hotelsRouter);
 app.use("/api/rooms", roomsRouter);
 app.use("/api/users", usersRouter);
 
+app.use((err, req, res, next) => {
+	const errorStatus = err.status || 500;
+	const errorMessage = err.message || "Something wrong!";
+	return res.status(errorStatus).json({
+		success: false,
+		status: errorStatus,
+		message: errorMessage,
+		stack: err.stack,
+	});
+});
+
 app.listen(7700, () => {
 	connect();
 	console.log("Connected to server on PORT = 7700!");
