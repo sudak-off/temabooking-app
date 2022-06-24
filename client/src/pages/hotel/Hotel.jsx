@@ -1,19 +1,20 @@
-import React, {useContext, useState} from 'react'
+import React, { useContext, useState } from 'react'
 import useFetch from '../../hooks/useFetch'
-import {useLocation, useNavigate} from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import {Footer} from '../../components/footer/Footer'
-import {Header} from '../../components/header/Header'
-import {MailList} from '../../components/mailLIst/MailList'
-import {Navbar} from '../../components/navbar/Navbar'
-import {AiOutlineLeft} from 'react-icons/ai';
-import {AiOutlineClose} from 'react-icons/ai';
-import {AiOutlineRight} from 'react-icons/ai';
-import {IoLocationSharp} from 'react-icons/io5';
+import { Footer } from '../../components/footer/Footer'
+import { Header } from '../../components/header/Header'
+import { MailList } from '../../components/mailLIst/MailList'
+import { Navbar } from '../../components/navbar/Navbar'
+import { AiOutlineLeft } from 'react-icons/ai';
+import { AiOutlineClose } from 'react-icons/ai';
+import { AiOutlineRight } from 'react-icons/ai';
+import { IoLocationSharp } from 'react-icons/io5';
 
 import "./hotel.scss"
-import {SearchContext} from '../../context/SearchContext'
-import {AuthContext} from "../../context/AuthContext";
+import { SearchContext } from '../../context/SearchContext'
+import { AuthContext } from "../../context/AuthContext";
+import Reserve from '../../components/reserv/Reserve'
 
 export const Hotel = () => {
     const location = useLocation();
@@ -22,11 +23,11 @@ export const Hotel = () => {
     const [open, setOpen] = useState(false);
     const [openModal, setOpenModal] = useState(false);
 
-    const {data, loading, error} = useFetch(`/hotels/find/${id}`);
-    const {user} = useContext(AuthContext);
+    const { data, loading, error } = useFetch(`/hotels/find/${id}`);
+    const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const {dates, options} = useContext(SearchContext);
+    const { dates, options } = useContext(SearchContext);
 
     const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -64,8 +65,8 @@ export const Hotel = () => {
     };
     return (
         <div>
-            <Navbar/>
-            <Header type="list"/>
+            <Navbar />
+            <Header type="list" />
             {loading ? 'Loading...' : <div className="hotelContainer">
                 {open && (
                     <div className="slider">
@@ -78,7 +79,7 @@ export const Hotel = () => {
                             onClick={() => handleMove("l")}
                         />
                         <div className="sliderWrapper">
-                            <img src={data.photos[slideNumber]} alt="" className="sliderImg"/>
+                            <img src={data.photos[slideNumber]} alt="" className="sliderImg" />
                         </div>
                         <AiOutlineRight
                             className="arrow"
@@ -90,7 +91,7 @@ export const Hotel = () => {
                     <button className="bookNow">Reserve or Book Now!</button>
                     <h1 className="hotelTitle">{data.name}</h1>
                     <div className="hotelAddress">
-                        <IoLocationSharp/>
+                        <IoLocationSharp />
                         <span>{data.address}</span>
                     </div>
                     <span className="hotelDistance">
@@ -127,13 +128,14 @@ export const Hotel = () => {
                             <h2>
                                 <b>${days * data.cheapestPrice * options.room}</b> ({days} nights)
                             </h2>
-                            <button>Reserve or Book Now!</button>
+                            <button onClick={handleClick} >Reserve or Book Now!</button>
                         </div>
                     </div>
                 </div>
-                <MailList/>
-                <Footer/>
+                <MailList />
+                <Footer />
             </div>}
+            {openModal && <Reserve setOpen={setOpenModal} hotelId={id} />}
         </div>
     )
 }
